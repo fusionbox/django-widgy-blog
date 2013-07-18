@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  {% for blog in blog_list %}
+    <article class="blog-summary">
+      <a href="{{ blog.get_absolute_url }}" class="image"><img src="{{ blog.image.url }}" /></a>
+      <h1><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h1>
+      <p>{{ blog.summary }}</p>
+      <footer>
+        <p>{% blocktrans with author=blog.author.get_full_name date=blog.date %}by {{ author }}, the {{ date }}{% endblocktrans %}</p>
+      </footer>
+    </article>
+  {% endfor %}
+{% endblock %}
