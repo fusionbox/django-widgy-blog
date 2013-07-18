@@ -1,0 +1,4 @@
+*.pyc
+*.pyo
+
+/widgy_blog.egg-info/
