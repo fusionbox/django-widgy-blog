@@ -77,15 +77,6 @@ class Blog(models.Model):
         })
 
 
-def get_published_versiontrackers():
-    # put this query in widgy
-    from widgy.models import VersionTracker
-    return VersionTracker.objects.filter(
-        commits__publish_at__lte=timezone.now(),
-        commits__reviewedversioncommit__approved_by__isnull=False
-    )
-
-
 @widgy.register
 class BlogLayout(DefaultLayout):
     title = models.CharField(max_length=1023)
@@ -102,7 +93,8 @@ class BlogLayout(DefaultLayout):
             from widgy.models import Node
 
             # put this query in widgy
-            published_commit_ids = get_published_versiontrackers().annotate(
+            VersionTracker = site.get_version_tracker_model()
+            published_commit_ids = VersionTracker.objects.published().annotate(
                 max_commit_id=Max('commits__pk')
             ).values('max_commit_id')
 
