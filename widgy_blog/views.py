@@ -69,12 +69,12 @@ class BlogQuerysetMixin(object):
 
 class BlogListView(BlogQuerysetMixin, ListView):
     context_object_name = 'blog_list'
-    template_name = 'widgy/blog/blog_list.html'
+    template_name = 'widgy/widgy_blog/blog_list.html'
 
 
 class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
     context_object_name = 'blog'
-    template_name = 'widgy/blog/blog_detail.html'
+    template_name = 'widgy/widgy_blog/blog_detail.html'
     site = site
 
     def get_object(self):
