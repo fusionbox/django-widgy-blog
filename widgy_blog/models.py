@@ -103,7 +103,7 @@ class BlogLayout(DefaultLayout):
 
             published_content_ids = Node.objects.filter(
                 versioncommit__pk__in=published_commit_ids,
-                content_type=ContentType.objects.get_for_model(self.model, for_concrete_model=False)
+                content_type=ContentType.objects.get_for_model(self.model, for_concrete_model=False),
             ).values('content_id')
 
             return self.filter(pk__in=published_content_ids)
