@@ -95,7 +95,9 @@ class BlogLayout(DefaultLayout):
             # put this query in widgy
             VersionTracker = site.get_version_tracker_model()
             published_commit_ids = VersionTracker.objects.published().annotate(
-                max_commit_id=Max('commits__pk')
+                max_commit_id=Max('commits__pk'),
+            ).filter(
+                pk__in=Blog.objects.all().values('content'),
             ).values('max_commit_id')
 
             # After https://code.djangoproject.com/ticket/20378
