@@ -86,10 +86,25 @@ class BlogAdmin(WidgyAdmin):
         'author',
         'image',
         'summary',
+        'description',
+        'keywords',
+        'page_title',
     ]
-    fields = layout_proxy_fields + ['content']
     list_filter = [IsPublishedListFilter, AuthorListFilter]
     list_display = ['title', 'author']
+
+    fieldsets = [
+        (None, {
+            'fields': [
+                'title', 'date', 'author', 'image', 'summary', 'content',
+            ],
+        }),
+        ('Meta', {
+            'fields': ['description', 'keywords', 'slug', 'page_title'],
+            'classes': ['collapse', 'grp-collapse', 'collapse-closed',
+                        'collapsed'],
+        }),
+    ]
 
     def get_queryset(self, request):
         return self.model.objects.select_related('content__working_copy')

@@ -87,6 +87,11 @@ class BlogLayout(DefaultLayout):
     image = ImageField(blank=True, null=True)
     summary = models.TextField(blank=True, null=True)
 
+    description = models.TextField(blank=True, null=True)
+    keywords = models.CharField(max_length=255, blank=True, null=True)
+    page_title = models.CharField(max_length=255, blank=True, null=True,
+        help_text='Will default to the blog title')
+
     class QuerySet(QuerySet):
         def published(self):
             from django.db.models import Max
@@ -111,6 +116,13 @@ class BlogLayout(DefaultLayout):
             return self.filter(pk__in=published_content_ids)
 
     objects = QuerySetManager()
+
+    @property
+    def meta_title(self):
+        if self.page_title:
+            return self.page_title
+        else:
+            return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
