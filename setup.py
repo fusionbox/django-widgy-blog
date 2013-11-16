@@ -18,8 +18,5 @@ setup(
     install_requires=[
         'widgy',
     ],
-    dependency_links=[
-        'http://github.com/fusionbox/django-widgy/tarball/master#egg=widgy-0.0.1',
-    ],
     zip_safe=False,
 )
