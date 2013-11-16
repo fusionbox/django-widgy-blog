@@ -1,0 +1,12 @@
+<ul>
+  {% for year in blog_archive %}
+    <li>
+      <a href="{{ year.get_absolute_url }}">{{ year.date|date:'Y' }} ({{ year.count }})</a>
+      <ul>
+        {% for month in year %}
+        <li><a href="{{ month.get_absolute_url }}">{{ month.date|date:'M' }} ({{ month.count }})</a></li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
