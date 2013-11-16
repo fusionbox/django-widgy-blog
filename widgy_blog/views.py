@@ -1,5 +1,8 @@
+import datetime
+
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
+from django.core import urlresolvers
 
 from widgy.templatetags.widgy_tags import render_root
 from widgy.models import Node
@@ -62,14 +65,78 @@ class BlogRenderer(object):
             return False
 
 
+class Year(list):
+    def __init__(self, date, *args, **kwargs):
+        super(Year, self).__init__(*args, **kwargs)
+        self.date = date
+
+    @property
+    def count(self):
+        return sum(month.count for month in self)
+
+    def get_absolute_url(self):
+        return urlresolvers.reverse('blog_archive_year', kwargs={
+            'year': self.date.year,
+        })
+
+
+class Month(list):
+    def __init__(self, date, *args, **kwargs):
+        super(Month, self).__init__(*args, **kwargs)
+        self.date = date
+
+    @property
+    def count(self):
+        return len(self)
+
+    def get_absolute_url(self):
+        return urlresolvers.reverse('blog_archive_month', kwargs={
+            'year': self.date.year,
+            'month': '{0:02}'.format(self.date.month),
+        })
+
+
 class BlogQuerysetMixin(object):
     def get_queryset(self):
+        return self.get_published_blogs()
+
+    def get_published_blogs(self):
         return BlogLayout.objects.select_related('image').published()
+
+    def get_archive_years(self, qs):
+        all_dates = qs.dates('date', 'day')
+        years = []
+        for date in all_dates:
+            if not years or date.year != years[-1].date.year:
+                years.append(Year(datetime.date(date.year, 1, 1)))
+
+            if not years[-1] or date.month != years[-1][-1].date.month:
+                years[-1].append(Month(datetime.date(date.year, date.month, 1)))
+
+            years[-1][-1].append(date)
+        return years
+
+    def get_context_data(self, **kwargs):
+        data = super(BlogQuerysetMixin, self).get_context_data(**kwargs)
+        data['blog_archive'] = self.get_archive_years(self.get_published_blogs())
+        return data
 
 
 class BlogListView(BlogQuerysetMixin, ListView):
     context_object_name = 'blog_list'
     template_name = 'widgy/widgy_blog/blog_list.html'
+
+
+class BlogYearArchiveView(BlogListView):
+    def get_queryset(self):
+        qs = super(BlogYearArchiveView, self).get_queryset()
+        return qs.filter(date__year=self.kwargs['year'])
+
+
+class BlogMonthArchiveView(BlogListView):
+    def get_queryset(self):
+        qs = super(BlogMonthArchiveView, self).get_queryset()
+        return qs.filter(date__month=self.kwargs['month'])
 
 
 class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
@@ -118,4 +185,6 @@ class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
 
 
 list = BlogListView.as_view()
+year_archive = BlogYearArchiveView.as_view()
+month_archive = BlogMonthArchiveView.as_view()
 detail = BlogDetailView.as_view()
