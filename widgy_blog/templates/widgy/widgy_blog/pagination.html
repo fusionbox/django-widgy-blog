@@ -1,0 +1,25 @@
+{% load i18n %}
+
+{% if is_paginated %}
+<p class="pagination">
+  {% if page_obj.has_previous %}
+    <a href="{% if page_obj.previous_page_number == 1 %}{{ request.path }}{% else %}?page={{ page_obj.previous_page_number }}{% endif %}" class="prev">{% trans "&laquo; previous" %}</a>
+  {% else %}
+    <span class="disabled prev">{% trans "&laquo; previous" %}</span>
+  {% endif %}
+  {% for page in paginator.page_range %}
+    {% if page %}
+      {% ifequal page page_obj.number %}
+        <span class="here page">{{ page }}</span>
+      {% else %}
+        <a href="?page={{ page }}" class="page">{{ page }}</a>
+      {% endifequal %}
+    {% endif %}
+  {% endfor %}
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="next">{% trans "next &raquo;" %}</a>
+  {% else %}
+    <span class="disabled next">{% trans "next &raquo;" %}</span>
+  {% endif %}
+</p>
+{% endif %}
