@@ -63,8 +63,13 @@ class BlogRenderer(object):
 
 
 class BlogQuerysetMixin(object):
+    model = BlogLayout
+
     def get_queryset(self):
-        return BlogLayout.objects.select_related('image').published()
+        return self.get_published_blogs()
+
+    def get_published_blogs(self):
+        return self.model.objects.select_related('image').published()
 
 
 class BlogListView(BlogQuerysetMixin, ListView):
