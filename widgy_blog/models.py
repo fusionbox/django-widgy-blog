@@ -49,9 +49,11 @@ class Blog(models.Model):
         return layout.title or 'untitled'
 
     # for admin
+    @property
     def title(self):
         return self.content.working_copy.content.title
 
+    @property
     def author(self):
         return self.content.working_copy.content.author
 
