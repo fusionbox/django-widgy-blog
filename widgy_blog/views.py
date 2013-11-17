@@ -97,11 +97,13 @@ class Month(list):
 
 
 class BlogQuerysetMixin(object):
+    model = BlogLayout
+
     def get_queryset(self):
         return self.get_published_blogs()
 
     def get_published_blogs(self):
-        return BlogLayout.objects.select_related('image').published()
+        return self.model.objects.select_related('image').published()
 
     def get_archive_years(self, qs):
         all_dates = qs.dates('date', 'day')

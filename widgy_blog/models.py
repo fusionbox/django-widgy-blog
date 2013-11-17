@@ -34,13 +34,13 @@ class Blog(models.Model):
     def get_absolute_url(self):
         # we don't know which version's slug to use, so rely on the
         # automatic redirect
-        return ('widgy_blog.views.detail', (), {
+        return ('blog_detail', (), {
             'pk': self.pk, 'slug': 'unkown',
         })
 
     @models.permalink
     def get_absolute_url_with_layout(self, layout):
-        return ('widgy_blog.views.detail', (), {
+        return ('blog_detail', (), {
             'pk': self.pk, 'slug': layout.slug,
         })
 
@@ -56,7 +56,7 @@ class Blog(models.Model):
         return self.content.working_copy.content.author
 
     def get_action_links(self, root_node):
-        url = urlresolvers.reverse('widgy_blog.views.detail', kwargs={
+        url = urlresolvers.reverse('blog_detail_preview', kwargs={
             'pk': self.pk,
             'root_node_pk': root_node.pk,
         })
@@ -71,7 +71,7 @@ class Blog(models.Model):
 
     @models.permalink
     def get_form_action_url(self, form, widgy):
-        return ('widgy_blog.views.detail', (), {
+        return ('blog_detail_form', (), {
             'pk': self.pk,
             'form_node_pk': form.node.pk,
         })
@@ -137,7 +137,7 @@ class BlogLayout(DefaultLayout):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('widgy_blog.views.detail', (), {
+        return ('blog_detail', (), {
             'pk': self.owner.pk, 'slug': self.slug,
         })
 
