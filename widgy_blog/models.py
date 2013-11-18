@@ -3,15 +3,13 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.conf import settings
-from django.db.models.query import QuerySet
 from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
-
-from fusionbox.db.models import QuerySetManager
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
 from widgy.contrib.page_builder.models import DefaultLayout, ImageField
+from widgy.utils import QuerySet
 
 from .site import site
 
@@ -115,7 +113,7 @@ class BlogLayout(DefaultLayout):
 
             return self.filter(pk__in=published_content_ids)
 
-    objects = QuerySetManager()
+    objects = QuerySet.as_manager()
 
     @property
     def meta_title(self):
