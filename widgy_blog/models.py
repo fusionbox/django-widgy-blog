@@ -17,14 +17,6 @@ from .site import site
 
 
 class AbstractBlog(models.Model):
-    content = VersionedWidgyField(
-        null=False,
-        on_delete=models.PROTECT,
-        site=site,
-        root_choices=[
-            'BlogLayout',
-        ],
-    )
 
     class Meta:
         verbose_name = 'blog post'
@@ -81,7 +73,14 @@ class AbstractBlog(models.Model):
 
 
 class Blog(AbstractBlog):
-    pass
+    content = VersionedWidgyField(
+        null=False,
+        on_delete=models.PROTECT,
+        site=site,
+        root_choices=[
+            'BlogLayout',
+        ],
+    )
 
 
 class AbstractBlogLayout(DefaultLayout):
