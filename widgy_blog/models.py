@@ -16,7 +16,7 @@ from widgy.contrib.page_builder.models import DefaultLayout, ImageField
 from .site import site
 
 
-class Blog(models.Model):
+class AbstractBlog(models.Model):
     content = VersionedWidgyField(
         null=False,
         on_delete=models.PROTECT,
@@ -79,8 +79,11 @@ class Blog(models.Model):
         })
 
 
-@widgy.register
-class BlogLayout(DefaultLayout):
+class Blog(AbstractBlog):
+    pass
+
+
+class AbstractBlogLayout(DefaultLayout):
     title = models.CharField(max_length=1023)
     slug = models.CharField(max_length=255, blank=True)
     date = models.DateField(default=timezone.now)
@@ -150,3 +153,8 @@ class BlogLayout(DefaultLayout):
         return Blog.objects.get(
             content__commits__root_node__content_id=self.pk,
             content__commits__root_node__content_type=ContentType.objects.get_for_model(self))
+
+
+@widgy.register
+class BlogLayout(AbstractBlogLayout):
+    pass
