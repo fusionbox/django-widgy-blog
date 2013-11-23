@@ -14,19 +14,12 @@ from widgy.utils import QuerySet
 from .site import site
 
 
-class Blog(models.Model):
-    content = VersionedWidgyField(
-        null=False,
-        on_delete=models.PROTECT,
-        site=site,
-        root_choices=[
-            'BlogLayout',
-        ],
-    )
+class AbstractBlog(models.Model):
 
     class Meta:
         verbose_name = 'blog post'
         verbose_name_plural = 'blog posts'
+        abstract = True
 
     @models.permalink
     def get_absolute_url(self):
@@ -77,20 +70,18 @@ class Blog(models.Model):
         })
 
 
-@widgy.register
-class BlogLayout(DefaultLayout):
-    title = models.CharField(max_length=1023)
-    slug = models.CharField(max_length=255, blank=True)
-    date = models.DateField(default=timezone.now)
-    author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
-                               related_name='blog_bloglayout_set')
-    image = ImageField(blank=True, null=True)
-    summary = models.TextField(blank=True, null=True)
+class Blog(AbstractBlog):
+    content = VersionedWidgyField(
+        null=False,
+        on_delete=models.PROTECT,
+        site=site,
+        root_choices=[
+            'BlogLayout',
+        ],
+    )
 
-    description = models.TextField(blank=True, null=True)
-    keywords = models.CharField(max_length=255, blank=True, null=True)
-    page_title = models.CharField(max_length=255, blank=True, null=True,
-        help_text='Will default to the blog title')
+
+class AbstractBlogLayout(DefaultLayout):
 
     class QuerySet(QuerySet):
         def published(self):
@@ -127,13 +118,14 @@ class BlogLayout(DefaultLayout):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        return super(BlogLayout, self).save(*args, **kwargs)
+        return super(AbstractBlogLayout, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title
 
     class Meta:
         ordering = ['-date']
+        abstract = True
 
     @models.permalink
     def get_absolute_url(self):
@@ -148,3 +140,18 @@ class BlogLayout(DefaultLayout):
         return Blog.objects.get(
             content__commits__root_node__content_id=self.pk,
             content__commits__root_node__content_type=ContentType.objects.get_for_model(self))
+
+
+class BlogLayout(AbstractBlogLayout):
+    title = models.CharField(max_length=1023)
+    slug = models.CharField(max_length=255, blank=True)
+    date = models.DateField(default=timezone.now)
+    author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
+                               related_name='blog_bloglayout_set')
+    image = ImageField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
+
+    description = models.TextField(blank=True, null=True)
+    keywords = models.CharField(max_length=255, blank=True, null=True)
+    page_title = models.CharField(max_length=255, blank=True, null=True,
+        help_text='Will default to the blog title')
