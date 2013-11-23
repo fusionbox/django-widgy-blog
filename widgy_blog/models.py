@@ -70,7 +70,6 @@ class AbstractBlog(models.Model):
 
 class Blog(AbstractBlog):
     content = VersionedWidgyField(
-        null=False,
         on_delete=models.PROTECT,
         site=site,
         root_choices=[
