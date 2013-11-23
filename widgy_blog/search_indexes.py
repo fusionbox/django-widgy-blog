@@ -6,7 +6,7 @@ from haystack import indexes
 from widgy.templatetags.widgy_tags import render_root
 from widgy.utils import html_to_plaintext
 
-from blog.models import Blog, BlogLayout
+from widgy_blog.models import Blog, BlogLayout
 
 User = get_user_model()
 
