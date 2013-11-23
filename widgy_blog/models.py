@@ -17,8 +17,6 @@ from .site import site
 class AbstractBlog(models.Model):
 
     class Meta:
-        verbose_name = 'blog post'
-        verbose_name_plural = 'blog posts'
         abstract = True
 
     @models.permalink
@@ -79,6 +77,10 @@ class Blog(AbstractBlog):
             'BlogLayout',
         ],
     )
+
+    class Meta:
+        verbose_name = 'blog post'
+        verbose_name_plural = 'blog posts'
 
 
 class AbstractBlogLayout(DefaultLayout):
