@@ -83,6 +83,18 @@ class Blog(AbstractBlog):
 
 
 class AbstractBlogLayout(DefaultLayout):
+    # Base attributes
+    title = models.CharField(max_length=1023)
+    date = models.DateField(default=timezone.now)
+    summary = models.TextField(blank=True, null=True)
+
+    # Meta information
+    slug = models.CharField(max_length=255, blank=True,
+                            help_text='Will default to the blog title')
+    description = models.TextField(blank=True, null=True)
+    keywords = models.CharField(max_length=255, blank=True, null=True)
+    page_title = models.CharField(max_length=255, blank=True, null=True,
+                                  help_text='Will default to the blog title')
 
     class QuerySet(QuerySet):
         def published(self):
@@ -144,15 +156,6 @@ class AbstractBlogLayout(DefaultLayout):
 
 
 class BlogLayout(AbstractBlogLayout):
-    title = models.CharField(max_length=1023)
-    slug = models.CharField(max_length=255, blank=True)
-    date = models.DateField(default=timezone.now)
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
                                related_name='blog_bloglayout_set')
     image = ImageField(blank=True, null=True)
-    summary = models.TextField(blank=True, null=True)
-
-    description = models.TextField(blank=True, null=True)
-    keywords = models.CharField(max_length=255, blank=True, null=True)
-    page_title = models.CharField(max_length=255, blank=True, null=True,
-        help_text='Will default to the blog title')
