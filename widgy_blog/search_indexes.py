@@ -6,7 +6,7 @@ from haystack import indexes
 from widgy.templatetags.widgy_tags import render_root
 from widgy.utils import html_to_plaintext
 
-from blog.models import Blog, BlogLayout
+from widgy_blog.models import Blog, BlogLayout
 
 User = get_user_model()
 
@@ -28,8 +28,11 @@ class BlogIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Blog
 
+    def get_bloglayout_queryset(self):
+        return BlogLayout.objects.published()
+
     def index_queryset(self, using=None):
-        published_blog_layouts = BlogLayout.objects.published()
+        published_blog_layouts = self.get_bloglayout_queryset()
         return self.get_model().objects.filter(
             content__commits__root_node__content_id__in=published_blog_layouts
         )
