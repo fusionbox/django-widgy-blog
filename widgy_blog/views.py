@@ -2,6 +2,7 @@ import datetime
 
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
+from django.contrib.syndication.views import Feed
 from django.core import urlresolvers
 
 from widgy.templatetags.widgy_tags import render_root
@@ -191,3 +192,28 @@ list = BlogListView.as_view()
 year_archive = BlogYearArchiveView.as_view()
 month_archive = BlogMonthArchiveView.as_view()
 detail = BlogDetailView.as_view()
+
+
+class RssFeed(Feed):
+    title = "Blog Feed"
+    link = urlresolvers.reverse_lazy('blog_list')
+    model = BlogLayout
+
+    def items(self):
+        return self.model.objects.published()
+
+    def item_title(self, item):
+        return item.title
+
+    def item_pubdate(self, item):
+        # Instead of this, BlogLayout.date should be a datetime.
+        return datetime.datetime.combine(item.date, datetime.time())
+
+    def item_author_name(self, item):
+        return item.author.get_full_name()
+
+    def item_description(self, item):
+        return item.description
+
+
+feed = RssFeed()
