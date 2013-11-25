@@ -42,10 +42,6 @@ class AbstractBlog(models.Model):
     def title(self):
         return self.content.working_copy.content.title
 
-    @property
-    def author(self):
-        return self.content.working_copy.content.author
-
     def get_action_links(self, root_node):
         url = urlresolvers.reverse('blog_detail_preview', kwargs={
             'pk': self.pk,
@@ -80,6 +76,10 @@ class Blog(AbstractBlog):
     class Meta:
         verbose_name = 'blog post'
         verbose_name_plural = 'blog posts'
+
+    @property
+    def author(self):
+        return self.content.working_copy.content.author
 
 
 class AbstractBlogLayout(DefaultLayout):
