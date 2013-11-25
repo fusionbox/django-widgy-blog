@@ -75,6 +75,7 @@ class BlogQuerysetMixin(object):
 class BlogListView(BlogQuerysetMixin, ListView):
     context_object_name = 'blog_list'
     template_name = 'widgy/widgy_blog/blog_list.html'
+    paginate_by = 10
 
 
 class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
