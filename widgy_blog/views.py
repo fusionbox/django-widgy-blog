@@ -82,6 +82,7 @@ class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
     context_object_name = 'blog'
     template_name = 'widgy/widgy_blog/blog_detail.html'
     site = site
+    owner_class = Blog
 
     def get_object(self):
         try:
@@ -92,7 +93,7 @@ class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
 
         self.root_node_pk = self.kwargs.get('root_node_pk')
 
-        qs = Blog.objects.filter(
+        qs = self.owner_class.objects.filter(
             pk=self.kwargs['pk']
         ).select_related(
             'content__head__root_node',
