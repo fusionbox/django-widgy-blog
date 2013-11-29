@@ -18,6 +18,7 @@ User = get_user_model()
 class IsPublishedListFilter(admin.SimpleListFilter):
     title = 'Published'
     parameter_name = 'is_published'
+    model = BlogLayout
 
     def lookups(self, request, model_admin):
         return (
@@ -28,11 +29,11 @@ class IsPublishedListFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == '0':
             return queryset.exclude(
-                content__commits__root_node__content_id__in=BlogLayout.objects.published()
+                content__commits__root_node__content_id__in=self.model.objects.published()
             ).distinct()
         if self.value() == '1':
             return queryset.filter(
-                content__commits__root_node__content_id__in=BlogLayout.objects.published()
+                content__commits__root_node__content_id__in=self.model.objects.published()
             ).distinct()
 
 
