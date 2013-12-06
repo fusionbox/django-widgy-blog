@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
@@ -87,6 +89,7 @@ class AbstractBlogLayout(DefaultLayout):
     # Base attributes
     title = models.CharField(max_length=1023)
     date = models.DateField(default=timezone.now)
+    datetime = models.DateTimeField("date and time", default=datetime.datetime.now)
     summary = models.TextField(blank=True, null=True)
 
     # Meta attributes
@@ -131,13 +134,14 @@ class AbstractBlogLayout(DefaultLayout):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        self.date = self.datetime.date()
         return super(AbstractBlogLayout, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['-datetime']
         abstract = True
 
     @models.permalink
