@@ -82,7 +82,7 @@ class BlogAdmin(WidgyAdmin):
     layout_proxy_fields = [
         'title',
         'slug',
-        'date',
+        'datetime',
         'author',
         'image',
         'summary',
@@ -96,7 +96,7 @@ class BlogAdmin(WidgyAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'title', 'date', 'author', 'image', 'summary', 'content',
+                'title', 'datetime', 'author', 'image', 'summary', 'content',
             ],
         }),
         ('Meta', {
