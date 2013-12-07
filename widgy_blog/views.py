@@ -135,11 +135,24 @@ class BlogYearArchiveView(BlogListView):
         qs = super(BlogYearArchiveView, self).get_queryset()
         return qs.filter(date__year=self.kwargs['year'])
 
+    def get_context_data(self, **kwargs):
+        kwargs = super(BlogYearArchiveView, self).get_context_data(**kwargs)
+        year = int(self.kwargs['year'])
+        kwargs['archive_date'] = datetime.date(year, 1, 1)
+        return kwargs
+
 
 class BlogMonthArchiveView(BlogListView):
     def get_queryset(self):
         qs = super(BlogMonthArchiveView, self).get_queryset()
         return qs.filter(date__month=self.kwargs['month'])
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(BlogMonthArchiveView, self).get_context_data(**kwargs)
+        year = int(self.kwargs['year'])
+        month = int(self.kwargs['month'])
+        kwargs['archive_date'] = datetime.date(year, month, 1)
+        return kwargs
 
 
 class BlogDetailView(BlogQuerysetMixin, RedirectGetHandleFormMixin, DetailView):
