@@ -3,13 +3,13 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
 from widgy.contrib.page_builder.models import DefaultLayout, ImageField
 from widgy.utils import QuerySet
+from widgy.generic.models import ContentType
 
 from .site import site
 
@@ -148,11 +148,10 @@ class AbstractBlogLayout(DefaultLayout):
 
     @cached_property
     def owner(self):
-        from django.contrib.contenttypes.models import ContentType
-
-        return Blog.objects.get(
+        content_type = ContentType.objects.get_for_model(self, for_concrete_model=False)
+        return Blog.objects.filter(
             content__commits__root_node__content_id=self.pk,
-            content__commits__root_node__content_type=ContentType.objects.get_for_model(self))
+            content__commits__root_node__content_type=content_type).distinct().get()
 
 
 class BlogLayout(AbstractBlogLayout):
