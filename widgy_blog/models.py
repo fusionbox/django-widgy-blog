@@ -10,6 +10,7 @@ from widgy.db.fields import VersionedWidgyField
 from widgy.contrib.page_builder.models import DefaultLayout, ImageField
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
+from widgy.models import links
 
 from .site import site
 
@@ -64,6 +65,7 @@ class AbstractBlog(models.Model):
         })
 
 
+@links.register
 class Blog(AbstractBlog):
     content = VersionedWidgyField(
         on_delete=models.PROTECT,
