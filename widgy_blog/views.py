@@ -146,7 +146,10 @@ class BlogYearArchiveView(BlogListView):
 class BlogMonthArchiveView(BlogListView):
     def get_queryset(self):
         qs = super(BlogMonthArchiveView, self).get_queryset()
-        return qs.filter(date__month=self.kwargs['month'])
+        return qs.filter(
+            date__year=self.kwargs['year'],
+            date__month=self.kwargs['month']
+        )
 
     def get_context_data(self, **kwargs):
         kwargs = super(BlogMonthArchiveView, self).get_context_data(**kwargs)
