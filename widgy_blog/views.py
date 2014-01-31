@@ -107,16 +107,16 @@ class BlogQuerysetMixin(object):
         return self.model.objects.select_related('image').published()
 
     def get_archive_years(self, qs):
-        all_dates = qs.values_list('date')
+        all_dates = qs.values_list('date', flat=True)
         years = []
         for date in all_dates:
-            if not years or date[0].year != years[-1].date.year:
-                years.append(Year(date[0]))
+            if not years or date.year != years[-1].date.year:
+                years.append(Year(date))
 
-            if not years[-1] or date[0].month != years[-1][-1].date.month:
-                years[-1].append(Month(date[0]))
+            if not years[-1] or date.month != years[-1][-1].date.month:
+                years[-1].append(Month(date))
 
-            years[-1][-1].append(date[0])
+            years[-1][-1].append(date)
         return years
 
     def get_context_data(self, **kwargs):
