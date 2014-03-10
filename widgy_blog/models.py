@@ -10,12 +10,22 @@ import widgy
 from widgy.models import Content
 from widgy.models.mixins import StrictDefaultChildrenMixin
 from widgy.db.fields import VersionedWidgyField
-from widgy.contrib.page_builder.models import ImageField, MainContent, Sidebar
+from widgy.contrib.page_builder.models import ImageField, MainContent as WidgyContent
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
 from widgy.models import links
 
 from .site import site
+
+
+@widgy.register
+class MainContent(WidgyContent):
+    class Meta:
+        proxy = True
+
+    @classmethod
+    def valid_child_of(cls, parent, obj=None):
+        return isinstance(parent, DefaultLayout)
 
 
 @widgy.register
@@ -29,7 +39,6 @@ class DefaultLayout(StrictDefaultChildrenMixin, Content):
 
     default_children = [
         ('main', MainContent, (), {}),
-        ('sidebar', Sidebar, (), {}),
     ]
 
     @classmethod
