@@ -2,17 +2,39 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core import urlresolvers
 
 import widgy
+from widgy.models import Content
+from widgy.models.mixins import StrictDefaultChildrenMixin
 from widgy.db.fields import VersionedWidgyField
-from widgy.contrib.page_builder.models import DefaultLayout, ImageField
+from widgy.contrib.page_builder.models import ImageField, MainContent, Sidebar
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
 from widgy.models import links
 
 from .site import site
+
+
+@widgy.register
+class DefaultLayout(StrictDefaultChildrenMixin, Content):
+    class Meta:
+        verbose_name = _('blog layout')
+        verbose_name_plural = _('blog layouts')
+
+    draggable = False
+    deletable = False
+
+    default_children = [
+        ('main', MainContent, (), {}),
+        ('sidebar', Sidebar, (), {}),
+    ]
+
+    @classmethod
+    def valid_child_of(cls, content, obj=None):
+        return False
 
 
 class AbstractBlog(models.Model):
