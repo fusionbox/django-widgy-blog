@@ -16,7 +16,7 @@ setup(
     long_description=read('README.rst'),
     packages=['widgy_blog'],
     install_requires=[
-        'widgy',
+        'django-widgy',
     ],
     zip_safe=False,
 )
