@@ -7,7 +7,9 @@ from django.core import urlresolvers
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
-from widgy.contrib.page_builder.models import DefaultLayout, ImageField
+from widgy.contrib.page_builder.models import (
+    Layout, ImageField, MainContent, Sidebar
+)
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
 from widgy.models import links
@@ -84,7 +86,7 @@ class Blog(AbstractBlog):
         return self.content.working_copy.content.author
 
 
-class AbstractBlogLayout(DefaultLayout):
+class AbstractBlogLayout(Layout):
     # Base attributes
     title = models.CharField(max_length=1023)
     date = models.DateField(default=timezone.now)
@@ -97,6 +99,11 @@ class AbstractBlogLayout(DefaultLayout):
     keywords = models.CharField(max_length=255, blank=True, null=True)
     page_title = models.CharField(max_length=255, blank=True, null=True,
                                   help_text='Will default to the blog title')
+
+    default_children = [
+        ('main', MainContent, (), {}),
+        ('sidebar', Sidebar, (), {}),
+    ]
 
     class QuerySet(QuerySet):
         def published(self):
@@ -156,7 +163,12 @@ class AbstractBlogLayout(DefaultLayout):
             content__commits__root_node__content_type=content_type).distinct().get()
 
 
+@widgy.register
 class BlogLayout(AbstractBlogLayout):
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
                                related_name='blog_bloglayout_set')
     image = ImageField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'blog post'
+        verbose_name_plural = 'blog posts'
