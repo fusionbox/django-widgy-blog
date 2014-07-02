@@ -1,1 +1,3 @@
-recursive-include widgy *
+include README.md LICENSE
+recursive-include widgy_blog *
+global-exclude *.pyc
