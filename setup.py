@@ -2,6 +2,8 @@
 import os
 from setuptools import setup
 
+from widgy_blog.version import get_version
+
 
 def get_absolutepath(fname):
     return os.path.join(os.path.dirname(__file__), fname)
@@ -13,7 +15,7 @@ def read(fname):
 
 setup(
     name='widgy-blog',
-    version='0.1-dev',
+    version=get_version(),
     description=__doc__,
     long_description=read('README.rst'),
     packages=['widgy_blog'],
