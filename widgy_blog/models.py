@@ -149,6 +149,7 @@ class AbstractBlogLayout(DefaultLayout):
             content__commits__root_node__content_type=content_type).distinct().get()
 
 
+@widgy.register
 class BlogLayout(AbstractBlogLayout):
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
                                related_name='blog_bloglayout_set')
