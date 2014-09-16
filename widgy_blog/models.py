@@ -97,6 +97,7 @@ class AbstractBlogLayout(DefaultLayout):
     keywords = models.CharField(max_length=255, blank=True, null=True)
     page_title = models.CharField(max_length=255, blank=True, null=True,
                                   help_text='Will default to the blog title')
+    owner_class = Blog
 
     class QuerySet(QuerySet):
         def published(self):
@@ -108,18 +109,10 @@ class AbstractBlogLayout(DefaultLayout):
             published_commit_ids = VersionTracker.objects.published().annotate(
                 max_commit_id=Max('commits__pk'),
             ).filter(
-                pk__in=Blog.objects.all().values('content'),
+                pk__in=self.model.owner_class.objects.all().values('content'),
             ).values('max_commit_id')
 
-            # After https://code.djangoproject.com/ticket/20378
-            # return BlogLayout.objects.filter(_nodes__versioncommit_pk__in=published_commit_ids)
-
-            published_content_ids = Node.objects.filter(
-                versioncommit__pk__in=published_commit_ids,
-                content_type=ContentType.objects.get_for_model(self.model, for_concrete_model=False),
-            ).values('content_id')
-
-            return self.filter(pk__in=published_content_ids)
+            return self.model.objects.filter(_nodes__versioncommit__pk__in=published_commit_ids)
 
     objects = QuerySet.as_manager()
 
@@ -151,7 +144,7 @@ class AbstractBlogLayout(DefaultLayout):
     @cached_property
     def owner(self):
         content_type = ContentType.objects.get_for_model(self, for_concrete_model=False)
-        return Blog.objects.filter(
+        return self.owner_class.objects.filter(
             content__commits__root_node__content_id=self.pk,
             content__commits__root_node__content_type=content_type).distinct().get()
 

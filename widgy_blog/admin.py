@@ -76,7 +76,7 @@ class BlogChangeList(ChangeList):
 
 class BlogAdmin(WidgyAdmin):
     form = BlogForm
-
+    layout_model = BlogLayout
     # These are the fields that are actually stored in widgy, not the
     # owner. We copy them back and forth to make the editing interface
     # nicer.
@@ -122,7 +122,7 @@ class BlogAdmin(WidgyAdmin):
             'fields': self.layout_proxy_fields,
         }
         defaults.update(kwargs)
-        LayoutModelForm = modelform_factory(BlogLayout, **defaults)
+        LayoutModelForm = modelform_factory(self.layout_model, **defaults)
         LayoutForm = type('BlogLayoutForm', (BlogForm,), LayoutModelForm.base_fields)
         LayoutForm.layout_proxy_fields = self.layout_proxy_fields
 
