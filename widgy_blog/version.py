@@ -1,5 +1,11 @@
 VERSION = (0, 1, 0)
 
+STAGE = 'alpha'
+
 
 def get_version():
-    return '.'.join(map(str, VERSION))
+    version =  '.'.join(map(str, VERSION))
+    if STAGE == 'alpha':
+        return version + '-dev'
+    else:
+        return version
