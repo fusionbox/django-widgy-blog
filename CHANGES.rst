@@ -1,8 +1,8 @@
 CHANGES
 =======
 
-0.1.0 (release September 16, 2014)
-----------------------------------
+0.1.0 (release 2014-12-03)
+--------------------------
 
 - Add model attributes to AbstractBlogLayout and BlogAdmin
   that make them easier to subclass. Update AbstractBlogLayout
