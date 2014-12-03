@@ -1,6 +1,6 @@
 VERSION = (0, 1, 0)
 
-STAGE = 'alpha'
+STAGE = 'final'
 
 
 def get_version():
