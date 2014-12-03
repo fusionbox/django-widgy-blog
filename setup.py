@@ -22,6 +22,7 @@ setup(
     author_email='programmers@fusionbox.com',
     description=__doc__,
     long_description='\n\n'.join([read('README.rst'), read('CHANGES.rst')]),
+    url='https://github.com/fusionbox/django-widgy-blog/',
     license='BSD',
     packages=['widgy_blog'],
     include_package_data=True,
@@ -36,6 +37,6 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python 2.7',
+        'Programming Language :: Python :: 2.7',
     ]
 )
