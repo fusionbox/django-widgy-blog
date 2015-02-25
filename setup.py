@@ -17,7 +17,7 @@ setup(
     packages=['widgy_blog'],
     install_requires=[
         'django-fusionbox',
-        'widgy',
+        'django-widgy',
     ],
     dependency_links=[
         'http://github.com/fusionbox/django-fusionbox/tarball/master#egg=django-fusionbox-0.0.2',
