@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.conf import settings
-from django.core import urlresolvers
+from django.core.urlresolvers import reverse
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
@@ -20,19 +20,13 @@ class AbstractBlog(models.Model):
     class Meta:
         abstract = True
 
-    @models.permalink
     def get_absolute_url(self):
         # we don't know which version's slug to use, so rely on the
         # automatic redirect
-        return ('blog_detail', (), {
-            'pk': self.pk, 'slug': 'unkown',
-        })
+        return reverse('blog_detail', args=(), kwargs={'pk': self.pk, 'slug': 'unkown'})
 
-    @models.permalink
     def get_absolute_url_with_layout(self, layout):
-        return ('blog_detail', (), {
-            'pk': self.pk, 'slug': layout.slug,
-        })
+        return reverse('blog_detail', args=(), kwargs={'pk': self.pk, 'slug': layout.slug})
 
     def __unicode__(self):
         layout = self.content.working_copy.content
@@ -44,10 +38,7 @@ class AbstractBlog(models.Model):
         return self.content.working_copy.content.title
 
     def get_action_links(self, root_node):
-        url = urlresolvers.reverse('blog_detail_preview', kwargs={
-            'pk': self.pk,
-            'root_node_pk': root_node.pk,
-        })
+        url = reverse('blog_detail_preview', kwargs={'pk': self.pk, 'root_node_pk': root_node.pk})
 
         return [
             {
@@ -57,12 +48,9 @@ class AbstractBlog(models.Model):
             },
         ]
 
-    @models.permalink
     def get_form_action_url(self, form, widgy):
-        return ('blog_detail_form', (), {
-            'pk': self.pk,
-            'form_node_pk': form.node.pk,
-        })
+        return reverse('blog_detail_form', args=(), kwargs={'pk': self.pk,
+                                                            'form_node_pk': form.node.pk})
 
 
 @links.register
@@ -135,11 +123,8 @@ class AbstractBlogLayout(DefaultLayout):
         ordering = ['-date']
         abstract = True
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('blog_detail', (), {
-            'pk': self.owner.pk, 'slug': self.slug,
-        })
+        return reverse('blog_detail', args=(), kwargs={'pk': self.owner.pk, 'slug': self.slug})
 
     @cached_property
     def owner(self):
