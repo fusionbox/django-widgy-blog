@@ -77,7 +77,7 @@ class BlogQuerysetMixin(object):
         return self.model.objects.select_related('image').published()
 
     def get_archive_years(self, qs):
-        return date_list_to_archive_list(qs.values_list('date', flat=True).order_by('date'))
+        return date_list_to_archive_list(qs.values_list('date', flat=True).order_by('-date'))
 
     def get_context_data(self, **kwargs):
         data = super(BlogQuerysetMixin, self).get_context_data(**kwargs)
