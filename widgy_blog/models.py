@@ -75,7 +75,7 @@ class Blog(AbstractBlog):
 class AbstractBlogLayout(DefaultLayout):
     # Base attributes
     title = models.CharField(max_length=1023)
-    date = models.DateField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now)
     summary = models.TextField(blank=True, null=True)
 
     # Meta information
