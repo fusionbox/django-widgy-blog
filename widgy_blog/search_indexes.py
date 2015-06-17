@@ -39,23 +39,26 @@ class BlogIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare(self, obj):
         self.prepared_data = super(BlogIndex, self).prepare(obj)
+
         request = fake_request()
-
         node = obj.content.get_published_node(request)
-        blog_layout = node.content
-        ctx = {
-            'request': fake_request(),
-            'root_node_override': node,
-        }
-        html = render_root(ctx, obj, 'content')
-        content = [
-            html_to_plaintext(html),
-            blog_layout.title,
-            blog_layout.summary,
-        ]
+        if node is not None:
+            # prepare() has to work on unpublished blogs because haystack
+            # filters them out at query time, not index time.
+            blog_layout = node.content
+            ctx = {
+                'request': fake_request(),
+                'root_node_override': node,
+            }
+            html = render_root(ctx, obj, 'content')
+            content = [
+                html_to_plaintext(html),
+                blog_layout.title,
+                blog_layout.summary,
+            ]
 
-        self.prepared_data['title'] = blog_layout.title
-        self.prepared_data['text'] = ' '.join(content)
-        self.prepared_data['get_absolute_url'] = obj.get_absolute_url_with_layout(blog_layout)
+            self.prepared_data['title'] = blog_layout.title
+            self.prepared_data['text'] = ' '.join(content)
+            self.prepared_data['get_absolute_url'] = obj.get_absolute_url_with_layout(blog_layout)
 
         return self.prepared_data
