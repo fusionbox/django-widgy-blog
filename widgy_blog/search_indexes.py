@@ -8,6 +8,8 @@ from widgy.utils import html_to_plaintext
 
 from widgy_blog.models import Blog, BlogLayout
 
+from widgy.signals import widgy_pre_index
+
 User = get_user_model()
 
 
@@ -24,6 +26,10 @@ class BlogIndex(indexes.SearchIndex, indexes.Indexable):
     # results page (we'd need to query for the published node), so cache
     # it here.
     get_absolute_url = indexes.CharField()
+
+    def full_prepare(self, *args, **kwargs):
+        widgy_pre_index.send(sender=self)
+        return super(BlogIndex, self).full_prepare(*args, **kwargs)
 
     def get_model(self):
         return Blog
