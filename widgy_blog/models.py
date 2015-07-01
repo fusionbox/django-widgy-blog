@@ -2,8 +2,11 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.core.urlresolvers import reverse
+
+from django_extensions.db.fields import AutoSlugField
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
@@ -139,3 +142,16 @@ class BlogLayout(AbstractBlogLayout):
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
                                related_name='blog_bloglayout_set')
     image = ImageField(blank=True, null=True)
+    tags = models.ManyToManyField('Tag', blank=True)
+
+
+@python_2_unicode_compatible
+class Tag(models.Model):
+    name = models.CharField(unique=True, max_length=100)
+    slug = AutoSlugField(populate_from='name', unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('blog_tag', kwargs={'tag': self.slug})

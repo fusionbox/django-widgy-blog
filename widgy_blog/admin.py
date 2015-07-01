@@ -3,14 +3,16 @@ from functools import partial
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelform_factory
+from django import forms
 from django.contrib.admin.views.main import ChangeList
+from django.forms.models import model_to_dict
 
 from widgy.admin import WidgyAdmin
 from widgy.forms import WidgyForm
 from widgy.utils import get_user_model
 from widgy.models import Node
 
-from .models import Blog, BlogLayout
+from .models import Blog, BlogLayout, Tag
 
 User = get_user_model()
 
@@ -56,15 +58,18 @@ class AuthorListFilter(admin.SimpleListFilter):
 
 class BlogForm(WidgyForm):
     def __init__(self, *args, **kwargs):
-        super(BlogForm, self).__init__(*args, **kwargs)
+        instance = kwargs['instance']
 
         try:
-            content = self.instance.content.working_copy.content
+            content = instance.content.working_copy.content
         except ObjectDoesNotExist:
             pass
         else:
-            for field_name in self.layout_proxy_fields:
-                self.fields[field_name].initial = getattr(content, field_name)
+            opts = self._meta
+            initial = model_to_dict(content, opts.fields, opts.exclude)
+            initial.update(kwargs.get('initial', {}))
+            kwargs['initial'] = initial
+        super(BlogForm, self).__init__(*args, **kwargs)
 
 
 class BlogChangeList(ChangeList):
@@ -90,6 +95,7 @@ class BlogAdmin(WidgyAdmin):
         'description',
         'keywords',
         'page_title',
+        'tags',
     ]
     list_filter = [IsPublishedListFilter, AuthorListFilter]
     list_display = ['title', 'author']
@@ -97,7 +103,7 @@ class BlogAdmin(WidgyAdmin):
     fieldsets = [
         (None, {
             'fields': [
-                'title', 'date', 'author', 'image', 'summary', 'content',
+                'title', 'date', 'author', 'image', 'summary', 'content', 'tags',
             ],
         }),
         ('Meta', {
@@ -148,3 +154,4 @@ class BlogAdmin(WidgyAdmin):
         return super(BlogAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Blog, BlogAdmin)
+admin.site.register(Tag, admin.ModelAdmin)
