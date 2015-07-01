@@ -90,11 +90,21 @@ class BlogListView(BlogQuerysetMixin, ListView):
     template_name = 'widgy/widgy_blog/blog_list.html'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        kwargs = super(BlogListView, self).get_context_data(**kwargs)
+        kwargs['tags'] = Tag.objects.all()
+        return kwargs
+
 
 class TagView(BlogListView):
     def get_queryset(self):
-        tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
-        return super(TagView, self).get_queryset().filter(tags=tag)
+        self.tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
+        return super(TagView, self).get_queryset().filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(TagView, self).get_context_data(**kwargs)
+        kwargs['current_tag'] = self.tag
+        return kwargs
 
 
 class BlogYearArchiveView(BlogListView):
