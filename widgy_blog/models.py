@@ -10,7 +10,7 @@ from django_extensions.db.fields import AutoSlugField
 
 import widgy
 from widgy.db.fields import VersionedWidgyField
-from widgy.contrib.page_builder.models import DefaultLayout, ImageField
+from widgy.contrib.page_builder.models import BaseLayout, MainContent, Sidebar, ImageField
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
 from widgy.models import links
@@ -75,7 +75,7 @@ class Blog(AbstractBlog):
         return self.content.working_copy.content.author
 
 
-class AbstractBlogLayout(DefaultLayout):
+class AbstractBlogLayout(BaseLayout):
     # Base attributes
     title = models.CharField(max_length=1023)
     date = models.DateTimeField(default=timezone.now)
@@ -106,6 +106,11 @@ class AbstractBlogLayout(DefaultLayout):
             return self.model.objects.filter(_nodes__versioncommit__pk__in=published_commit_ids)
 
     objects = QuerySet.as_manager()
+
+    default_children = [
+        ('main', MainContent, (), {}),
+        ('sidebar', Sidebar, (), {}),
+    ]
 
     @property
     def meta_title(self):
