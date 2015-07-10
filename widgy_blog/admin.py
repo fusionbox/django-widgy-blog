@@ -58,17 +58,18 @@ class AuthorListFilter(admin.SimpleListFilter):
 
 class BlogForm(WidgyForm):
     def __init__(self, *args, **kwargs):
-        instance = kwargs['instance']
+        instance = kwargs.get('instance')
 
-        try:
-            content = instance.content.working_copy.content
-        except ObjectDoesNotExist:
-            pass
-        else:
-            opts = self._meta
-            initial = model_to_dict(content, opts.fields, opts.exclude)
-            initial.update(kwargs.get('initial', {}))
-            kwargs['initial'] = initial
+        if instance:
+            try:
+                content = instance.content.working_copy.content
+            except ObjectDoesNotExist:
+                pass
+            else:
+                opts = self._meta
+                initial = model_to_dict(content, opts.fields, opts.exclude)
+                initial.update(kwargs.get('initial', {}))
+                kwargs['initial'] = initial
         super(BlogForm, self).__init__(*args, **kwargs)
 
 
