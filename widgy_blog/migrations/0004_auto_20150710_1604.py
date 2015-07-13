@@ -11,14 +11,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
+        migrations.AlterField(
             model_name='bloglayout',
             name='defaultlayout_ptr',
-        ),
-        migrations.AddField(
-            model_name='bloglayout',
-            name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
             preserve_default=False,
+        ),
+        migrations.RenameField(
+            model_name='bloglayout',
+            old_name='defaultlayout_ptr',
+            new_name='id',
         ),
     ]
