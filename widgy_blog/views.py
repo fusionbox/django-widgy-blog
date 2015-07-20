@@ -9,7 +9,7 @@ from widgy.templatetags.widgy_tags import render_root
 from widgy.models import Node
 from widgy.contrib.form_builder.views import HandleFormMixin
 
-from .models import Blog, BlogLayout
+from .models import Blog, BlogLayout, Tag
 from .site import site
 from .utils import date_list_to_archive_list
 
@@ -90,6 +90,22 @@ class BlogListView(BlogQuerysetMixin, ListView):
     template_name = 'widgy/widgy_blog/blog_list.html'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        kwargs = super(BlogListView, self).get_context_data(**kwargs)
+        kwargs['tags'] = Tag.objects.all()
+        return kwargs
+
+
+class TagView(BlogListView):
+    def get_queryset(self):
+        self.tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
+        return super(TagView, self).get_queryset().filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(TagView, self).get_context_data(**kwargs)
+        kwargs['current_tag'] = self.tag
+        return kwargs
+
 
 class BlogYearArchiveView(BlogListView):
     def get_queryset(self):
@@ -169,6 +185,7 @@ list = BlogListView.as_view()
 year_archive = BlogYearArchiveView.as_view()
 month_archive = BlogMonthArchiveView.as_view()
 detail = BlogDetailView.as_view()
+tag = TagView.as_view()
 
 
 class RssFeed(Feed):

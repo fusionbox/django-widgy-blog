@@ -48,6 +48,5 @@ class Migration(migrations.Migration):
                 'ordering': ['-date'],
                 'abstract': False,
             },
-            bases=('page_builder.defaultlayout',),
         ),
     ]

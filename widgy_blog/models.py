@@ -2,12 +2,15 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from django_extensions.db.fields import AutoSlugField
+
 import widgy
 from widgy.db.fields import VersionedWidgyField
-from widgy.contrib.page_builder.models import DefaultLayout, ImageField
+from widgy.contrib.page_builder.models import BaseLayout, MainContent, Sidebar, ImageField
 from widgy.utils import QuerySet
 from widgy.generic.models import ContentType
 from widgy.models import links
@@ -72,7 +75,7 @@ class Blog(AbstractBlog):
         return self.content.working_copy.content.author
 
 
-class AbstractBlogLayout(DefaultLayout):
+class AbstractBlogLayout(BaseLayout):
     # Base attributes
     title = models.CharField(max_length=1023)
     date = models.DateTimeField(default=timezone.now)
@@ -103,6 +106,11 @@ class AbstractBlogLayout(DefaultLayout):
             return self.model.objects.filter(_nodes__versioncommit__pk__in=published_commit_ids)
 
     objects = QuerySet.as_manager()
+
+    default_children = [
+        ('main', MainContent, (), {}),
+        ('sidebar', Sidebar, (), {}),
+    ]
 
     @property
     def meta_title(self):
@@ -139,3 +147,16 @@ class BlogLayout(AbstractBlogLayout):
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
                                related_name='blog_bloglayout_set')
     image = ImageField(blank=True, null=True)
+    tags = models.ManyToManyField('Tag', blank=True)
+
+
+@python_2_unicode_compatible
+class Tag(models.Model):
+    name = models.CharField(unique=True, max_length=100)
+    slug = AutoSlugField(populate_from='name', unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('blog_tag', kwargs={'tag': self.slug})
