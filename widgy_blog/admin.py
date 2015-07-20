@@ -134,7 +134,7 @@ class BlogAdmin(WidgyAdmin):
         layout_data = dict(
             (k, v) for k, v in form.cleaned_data.items() if k in self.layout_proxy_fields
         )
-        if not obj.content.pk:
+        if not change:
             # adding
             field = self.model._meta.get_field('content')
             obj.content = field.add_root(obj, layout_data)

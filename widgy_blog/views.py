@@ -11,6 +11,7 @@ from widgy.contrib.form_builder.views import HandleFormMixin
 
 from .models import Blog, BlogLayout
 from .site import site
+from .utils import date_list_to_archive_list
 
 
 class RedirectGetHandleFormMixin(HandleFormMixin):
@@ -66,37 +67,6 @@ class BlogRenderer(object):
             return False
 
 
-class Year(list):
-    def __init__(self, date, *args, **kwargs):
-        super(Year, self).__init__(*args, **kwargs)
-        self.date = date
-
-    @property
-    def count(self):
-        return sum(month.count for month in self)
-
-    def get_absolute_url(self):
-        return urlresolvers.reverse('blog_archive_year', kwargs={
-            'year': self.date.year,
-        })
-
-
-class Month(list):
-    def __init__(self, date, *args, **kwargs):
-        super(Month, self).__init__(*args, **kwargs)
-        self.date = date
-
-    @property
-    def count(self):
-        return len(self)
-
-    def get_absolute_url(self):
-        return urlresolvers.reverse('blog_archive_month', kwargs={
-            'year': self.date.year,
-            'month': '{0:02}'.format(self.date.month),
-        })
-
-
 class BlogQuerysetMixin(object):
     model = BlogLayout
 
@@ -104,20 +74,10 @@ class BlogQuerysetMixin(object):
         return self.get_published_blogs()
 
     def get_published_blogs(self):
-        return self.model.objects.select_related('image').published()
+        return self.model.objects.select_related('image').published().order_by('-date')
 
     def get_archive_years(self, qs):
-        all_dates = qs.values_list('date', flat=True)
-        years = []
-        for date in all_dates:
-            if not years or date.year != years[-1].date.year:
-                years.append(Year(date))
-
-            if not years[-1] or date.month != years[-1][-1].date.month:
-                years[-1].append(Month(date))
-
-            years[-1][-1].append(date)
-        return years
+        return date_list_to_archive_list(qs.values_list('date', flat=True).order_by('-date'))
 
     def get_context_data(self, **kwargs):
         data = super(BlogQuerysetMixin, self).get_context_data(**kwargs)
