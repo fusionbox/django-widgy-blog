@@ -3,13 +3,12 @@ from functools import partial
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelform_factory
-from django import forms
 from django.contrib.admin.views.main import ChangeList
 from django.forms.models import model_to_dict
+from django.contrib.auth import get_user_model
 
 from widgy.admin import WidgyAdmin
 from widgy.forms import WidgyForm
-from widgy.utils import get_user_model
 from widgy.models import Node
 
 from .models import Blog, BlogLayout, Tag

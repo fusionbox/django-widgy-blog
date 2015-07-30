@@ -5,6 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
 
 from django_extensions.db.fields import AutoSlugField
 
@@ -12,7 +13,6 @@ import widgy
 from widgy.db.fields import VersionedWidgyField
 from widgy.contrib.page_builder.models import BaseLayout, MainContent, Sidebar, ImageField
 from widgy.utils import QuerySet
-from widgy.generic.models import ContentType
 from widgy.models import links
 
 from .site import site
