@@ -193,8 +193,17 @@ class RssFeed(Feed):
     link = urlresolvers.reverse_lazy('blog_list')
     model = BlogLayout
 
-    def items(self):
-        return self.model.objects.published()
+    def get_object(self, request, tag=None):
+        if tag is not None:
+            return get_object_or_404(Tag, slug=tag)
+        else:
+            return None
+
+    def items(self, obj=None):
+        qs = self.model.objects.published()
+        if obj is not None:
+            qs = qs.filter(tags=obj)
+        return qs
 
     def item_title(self, item):
         return item.title
