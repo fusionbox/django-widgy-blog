@@ -15,11 +15,11 @@ this tutorial_ if this is not the case.)
 
 1.  Install the package
 
-        $ pip install django-widgy-blog
+        $ pip install widgy-blog
 
 2.  Add ``widgy_blog`` to your ``INSTALLED_APPS``.
 
-3.  Run ``python manage.py syncdb`` and ``python manage.py migrate`` in
+3.  Run ``python manage.py migrate`` in
     order to generate the relevant models in the database.
 
 4.  Configure the urls:
@@ -32,7 +32,7 @@ this tutorial_ if this is not the case.)
 
     b.  Alternatively, you can include the widgy_blog urls within your urls.py
         file as you normally would. Just remember to add them before the
-        included Mezzanine urls if your editing the root conf!
+        included Mezzanine urls if you're editing the root conf!
 
 5.  That's it. Log in to the admin center and start adding blog posts!
 
