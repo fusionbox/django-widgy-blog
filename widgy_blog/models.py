@@ -17,7 +17,7 @@ from widgy.models import links
 
 from .site import site
 
-
+@python_2_unicode_compatible
 class AbstractBlog(models.Model):
 
     class Meta:
@@ -31,7 +31,7 @@ class AbstractBlog(models.Model):
     def get_absolute_url_with_layout(self, layout):
         return reverse('blog_detail', args=(), kwargs={'pk': self.pk, 'slug': layout.slug})
 
-    def __unicode__(self):
+    def __str__(self):
         layout = self.content.working_copy.content
         return layout.title or 'untitled'
 
