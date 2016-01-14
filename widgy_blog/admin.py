@@ -120,25 +120,33 @@ class BlogAdmin(WidgyAdmin):
     def get_changelist(self, *args, **kwargs):
         return BlogChangeList
 
+    def get_layout_model(self, request, obj=None):
+        return self.layout_model
+
+    def get_layout_proxy_fields(self, request, obj=None):
+        return self.layout_proxy_fields
+
     def get_form(self, request, obj=None, **kwargs):
         # We need to get the fields for BlogLayout
+        layout_proxy_fields = self.get_layout_proxy_fields(request, obj)
         defaults = {
             'formfield_callback': partial(self.formfield_for_dbfield, request=request),
             'form': self.form,
-            'fields': self.layout_proxy_fields,
+            'fields': layout_proxy_fields,
         }
         defaults.update(kwargs)
         LayoutModelForm = modelform_factory(self.layout_model, **defaults)
         LayoutForm = type('BlogLayoutForm', (BlogForm,), LayoutModelForm.base_fields)
-        LayoutForm.layout_proxy_fields = self.layout_proxy_fields
+        LayoutForm.layout_proxy_fields = layout_proxy_fields
 
         kwargs['form'] = LayoutForm
 
         return super(BlogAdmin, self).get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
+        layout_proxy_fields = self.get_layout_proxy_fields(request, obj)
         layout_data = dict(
-            (k, v) for k, v in form.cleaned_data.items() if k in self.layout_proxy_fields
+            (k, v) for k, v in form.cleaned_data.items() if k in layout_proxy_fields
         )
         if not change:
             # adding
