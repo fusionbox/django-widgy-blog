@@ -26,6 +26,9 @@ setup(
     license='BSD',
     packages=['widgy_blog'],
     include_package_data=True,
+    package_data={
+        '': ['CHANGES.rst'],
+    },
     install_requires=[
         'django-widgy',
     ],
