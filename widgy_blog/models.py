@@ -17,8 +17,12 @@ from widgy.models import links
 
 from .site import site
 
+
 @python_2_unicode_compatible
 class AbstractBlog(models.Model):
+    detail_url_name = 'blog_detail'
+    preview_url_name = 'blog_detail_preview'
+    form_url_name = 'blog_detail_form'
 
     class Meta:
         abstract = True
@@ -26,10 +30,10 @@ class AbstractBlog(models.Model):
     def get_absolute_url(self):
         # we don't know which version's slug to use, so rely on the
         # automatic redirect
-        return reverse('blog_detail', args=(), kwargs={'pk': self.pk, 'slug': 'unkown'})
+        return reverse(self.detail_url_name, args=(), kwargs={'pk': self.pk, 'slug': 'unkown'})
 
     def get_absolute_url_with_layout(self, layout):
-        return reverse('blog_detail', args=(), kwargs={'pk': self.pk, 'slug': layout.slug})
+        return reverse(self.detail_url_name, args=(), kwargs={'pk': self.pk, 'slug': layout.slug})
 
     def __str__(self):
         layout = self.content.working_copy.content
@@ -41,7 +45,7 @@ class AbstractBlog(models.Model):
         return self.content.working_copy.content.title
 
     def get_action_links(self, root_node):
-        url = reverse('blog_detail_preview', kwargs={'pk': self.pk, 'root_node_pk': root_node.pk})
+        url = reverse(self.preview_url_name, kwargs={'pk': self.pk, 'root_node_pk': root_node.pk})
 
         return [
             {
@@ -52,7 +56,7 @@ class AbstractBlog(models.Model):
         ]
 
     def get_form_action_url(self, form, widgy):
-        return reverse('blog_detail_form', args=(), kwargs={'pk': self.pk,
+        return reverse(self.form_url_name, args=(), kwargs={'pk': self.pk,
                                                             'form_node_pk': form.node.pk})
 
 
