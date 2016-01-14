@@ -4,6 +4,9 @@ CHANGES
 0.2.0 (not yet released)
 ------------------------
 
+- Blog views with a page querystring equal to 1 will now have a canonical_url
+  in the template context pointing to the same page without that querystring.
+
 0.1.0 (release 2014-12-03)
 --------------------------
 
