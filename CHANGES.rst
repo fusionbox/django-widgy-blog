@@ -4,6 +4,11 @@ CHANGES
 0.2.0 (not yet released)
 ------------------------
 
+- Support for Django 1.8
+- Blog archives are now shown in reverse chronological order.
+- Blogs now have date and time rather than just date published.
+- Tags are now supported
+- Various small bugfixes.
 - Blog views with a page querystring equal to 1 will now have a canonical_url
   in the template context pointing to the same page without that querystring.
 
