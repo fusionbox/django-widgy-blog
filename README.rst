@@ -15,7 +15,7 @@ this tutorial_ if this is not the case.)
 
 1.  Install the package
 
-        $ pip install widgy-blog
+        $ pip install django-widgy-blog
 
 2.  Add ``widgy_blog`` to your ``INSTALLED_APPS``.
 
