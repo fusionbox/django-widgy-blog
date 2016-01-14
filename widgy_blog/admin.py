@@ -142,7 +142,7 @@ class BlogAdmin(WidgyAdmin):
         )
         if not change:
             # adding
-            tags = layout_data.pop('tags')
+            tags = layout_data.pop('tags', [])
             field = self.model._meta.get_field('content')
             obj.content = field.add_root(obj, layout_data)
             obj.content.working_copy.content.tags = tags
