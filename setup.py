@@ -2,7 +2,7 @@
 import os
 from setuptools import setup
 
-from widgy_blog.version import get_version
+version = '0.2.0.dev'
 
 __doc__ = "Reusable blog app for Django-Widgy"
 
@@ -16,8 +16,8 @@ def read(fname):
         return f.read()
 
 setup(
-    name='widgy-blog',
-    version=get_version(),
+    name='django-widgy-blog',
+    version=version,
     author='Fusionbox, Inc.',
     author_email='programmers@fusionbox.com',
     description=__doc__,
@@ -28,7 +28,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'django-widgy',
-        'south>=1.0',
     ],
     zip_safe=False,
     classifiers=[
