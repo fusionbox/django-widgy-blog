@@ -1,8 +1,8 @@
 CHANGES
 =======
 
-0.2.0 (not yet released)
-------------------------
+0.2.0 (2016-01-14)
+------------------
 
 - Support for Django 1.8
 - Blog archives are now shown in reverse chronological order.
