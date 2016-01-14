@@ -4,6 +4,12 @@ CHANGES
 0.2.0 (not yet released)
 ------------------------
 
+- Support for Django 1.8
+- Blog archives are now shown in reverse chronological order.
+- Blogs now have date and time rather than just date published.
+- Tags are now supported
+- Various small bugfixes.
+
 0.1.0 (release 2014-12-03)
 --------------------------
 
