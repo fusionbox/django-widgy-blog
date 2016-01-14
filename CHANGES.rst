@@ -9,6 +9,8 @@ CHANGES
 - Blogs now have date and time rather than just date published.
 - Tags are now supported
 - Various small bugfixes.
+- Blog views with a page querystring equal to 1 will now have a canonical_url
+  in the template context pointing to the same page without that querystring.
 
 0.1.0 (release 2014-12-03)
 --------------------------

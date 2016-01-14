@@ -1,5 +1,7 @@
 import datetime
 
+from django.utils import six
+from django.utils.six.moves.urllib import parse
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.syndication.views import Feed
@@ -90,9 +92,24 @@ class BlogListView(BlogQuerysetMixin, ListView):
     template_name = 'widgy/widgy_blog/blog_list.html'
     paginate_by = 10
 
+    def get_canonical_url(self):
+        """Determine whether to send a canonical url for the blog list.
+
+        A blog list view without any query should be the same as a blog
+        list view with query `page=1`. The `page=1` view should have a canonical
+        link to the simpler URL.
+        """
+        if self.request.GET.get('page') == '1':
+            querystring = self.request.GET.copy()
+            del querystring['page']
+            return parse.urlunsplit(('', '', self.request.path, querystring.urlencode(), ''))
+        else:
+            return None
+
     def get_context_data(self, **kwargs):
         kwargs = super(BlogListView, self).get_context_data(**kwargs)
         kwargs['tags'] = Tag.objects.all()
+        kwargs['canonical_url'] = self.get_canonical_url()
         return kwargs
 
 
