@@ -4,7 +4,7 @@ CHANGES
 0.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix PyPI bug
 
 
 0.2.0 (2016-01-14)
