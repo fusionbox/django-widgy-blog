@@ -11,6 +11,7 @@ CHANGES
 - Various small bugfixes.
 - Blog views with a page querystring equal to 1 will now have a canonical_url
   in the template context pointing to the same page without that querystring.
+- **Backwards Incompatible:** Drop support for django versions less than 1.8
 
 0.1.0 (release 2014-12-03)
 --------------------------
