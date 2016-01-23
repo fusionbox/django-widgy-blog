@@ -7,6 +7,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.syndication.views import Feed
 from django.core import urlresolvers
 
+from widgy.utils import build_url
 from widgy.templatetags.widgy_tags import render_root
 from widgy.models import Node
 from widgy.contrib.form_builder.views import HandleFormMixin
@@ -114,11 +115,11 @@ class BlogListView(BlogQuerysetMixin, ListView):
         prev_page = None
         next_page = None
 
-        if page > 1:
-            prev_page = page - 1
+        if page.has_previous():
+            prev_page = page.previous_page_number()
 
-        if page < paginator.num_pages:
-            next_page = page + 1
+        if page.has_next():
+            next_page = page.next_page_number()
 
         return {'prev': prev_page, 'next': next_page}
 
@@ -135,10 +136,10 @@ class BlogListView(BlogQuerysetMixin, ListView):
             else:
                 querystring['page'] = neighbor_pages['prev']
 
-            prev_link = parse.urlunsplit(('', '', self.request.path, querystring.urlencode(), ''))
+            prev_link = build_url(self.request.path, querystring)
         if neighbor_pages['next']:
             querystring['page'] = neighbor_pages['next']
-            next_link = parse.urlunsplit(('', '', self.request.path, querystring.urlencode(), ''))
+            next_link = build_url(self.request.path, querystring)
 
         return {'prev_link': prev_link, 'next_link': next_link}
 
@@ -156,7 +157,7 @@ class BlogListView(BlogQuerysetMixin, ListView):
             else:
                 raise Http404("Page is not 'last', nor can it be converted to an int.")
 
-        return page_num
+        return paginator.page(page_num)
 
     def get_context_data(self, **kwargs):
         kwargs = super(BlogListView, self).get_context_data(**kwargs)
