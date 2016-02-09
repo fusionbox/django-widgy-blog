@@ -136,7 +136,11 @@ class AbstractBlogLayout(BaseLayout):
         abstract = True
 
     def get_absolute_url(self):
-        return reverse('blog_detail', args=(), kwargs={'pk': self.owner.pk, 'slug': self.slug})
+        return reverse(
+            self.owner_class.detail_url_name,
+            args=(),
+            kwargs={'pk': self.owner.pk, 'slug': self.slug}
+        )
 
     @cached_property
     def owner(self):
