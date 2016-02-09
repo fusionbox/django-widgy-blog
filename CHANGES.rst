@@ -1,10 +1,10 @@
 CHANGES
 =======
 
-0.2.2 (unreleased)
+0.2.2 (2016-02-08)
 ------------------
 
-- Nothing changed yet.
+- Fix subclassing view name bug
 
 
 0.2.1 (2016-01-14)
