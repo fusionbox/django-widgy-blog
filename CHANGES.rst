@@ -4,7 +4,8 @@ CHANGES
 0.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Blog views with pagination will now calculate appropriate `rel=prev`
+  and `rel=next` links.
 
 
 0.2.2 (2016-02-08)
