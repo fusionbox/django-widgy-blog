@@ -129,7 +129,7 @@ class BlogAdmin(WidgyAdmin):
         }
         defaults.update(kwargs)
         LayoutModelForm = modelform_factory(self.layout_model, **defaults)
-        LayoutForm = type('BlogLayoutForm', (BlogForm,), LayoutModelForm.base_fields)
+        LayoutForm = type('BlogLayoutForm', (self.form,), LayoutModelForm.base_fields)
         LayoutForm.layout_proxy_fields = self.layout_proxy_fields
 
         kwargs['form'] = LayoutForm
