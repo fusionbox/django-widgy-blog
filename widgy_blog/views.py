@@ -191,7 +191,7 @@ class BlogYearArchiveView(BlogListView):
         return kwargs
 
 
-class BlogMonthArchiveView(BlogListView):
+class BlogMonthArchiveView(BlogYearArchiveView):
     def get_queryset(self):
         qs = super(BlogMonthArchiveView, self).get_queryset()
         return qs.filter(
