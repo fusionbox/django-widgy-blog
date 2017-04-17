@@ -1,3 +1,4 @@
+import django
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
@@ -107,7 +108,17 @@ class AbstractBlogLayout(BaseLayout):
                 pk__in=self.model.owner_class.objects.all().values('content'),
             ).values('max_commit_id')
 
-            return self.model.objects.filter(_nodes__versioncommit__pk__in=published_commit_ids)
+            # https://code.djangoproject.com/ticket/20378 was fixed in Django 1.6
+            # Widgy still supports Django 1.4 and 1.5, so this queryset method must
+            # be backwards compatible.
+            if django.VERSION >= (1, 6, 0):
+                return self.model.objects.filter(_nodes__versioncommit__pk__in=published_commit_ids)
+            else:
+                published_content_ids = Node.objects.filter(
+                    versioncommit__pk__in=published_commit_ids,
+                    content_type=ContentType.objects.get_for_model(self.model, for_concrete_model=False),
+                ).values('content_id')
+                return self.filter(pk__in=published_content_ids)
 
     objects = QuerySet.as_manager()
 

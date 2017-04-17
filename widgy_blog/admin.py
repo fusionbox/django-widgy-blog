@@ -120,6 +120,11 @@ class BlogAdmin(WidgyAdmin):
     def get_changelist(self, *args, **kwargs):
         return BlogChangeList
 
+    # XXX: Django 1.4 does not support get_form overrides within initial
+    # admin model validation. Registering the BlogAdmin with the admin site
+    # will cause Django to throw an ImproperlyConfigured exception. Until
+    # this is fixed and somehow made backwards compatible, widgy_blog does
+    # not support Django 1.4
     def get_form(self, request, obj=None, **kwargs):
         # We need to get the fields for BlogLayout
         defaults = {
