@@ -2,7 +2,7 @@
 import os
 from setuptools import setup
 
-version = '0.2.3'
+version = '0.2.4.dev0'
 
 __doc__ = "Reusable blog app for Django-Widgy"
 
