@@ -1,11 +1,12 @@
 CHANGES
 =======
 
-0.2.3 (unreleased)
+0.2.3 (2019-07-15)
 ------------------
 
 - Blog views with pagination will now calculate appropriate `rel=prev`
   and `rel=next` links.
+- Added Django 1.10 support.
 
 
 0.2.2 (2016-02-08)
