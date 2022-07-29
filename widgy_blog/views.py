@@ -5,7 +5,7 @@ from django.utils.six.moves.urllib import parse
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.syndication.views import Feed
-from django.core import urlresolvers
+from django import urls
 
 from widgy.utils import build_url
 from widgy.templatetags.widgy_tags import render_root
@@ -262,7 +262,7 @@ tag = TagView.as_view()
 
 class RssFeed(Feed):
     title = "Blog Feed"
-    link = urlresolvers.reverse_lazy('blog_list')
+    link = urls.reverse_lazy('blog_list')
     model = BlogLayout
 
     def get_object(self, request, tag=None):

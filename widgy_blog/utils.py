@@ -1,7 +1,7 @@
 import itertools
 import datetime
 
-from django.core import urlresolvers
+from django import urls
 
 
 class Year(list):
@@ -15,7 +15,7 @@ class Year(list):
         return sum(month.count for month in self)
 
     def get_absolute_url(self):
-        return urlresolvers.reverse('blog_archive_year', kwargs={
+        return urls.reverse('blog_archive_year', kwargs={
             'year': self.date.year,
         })
 
@@ -31,7 +31,7 @@ class Month(list):
         return sum(day.count for day in self)
 
     def get_absolute_url(self):
-        return urlresolvers.reverse('blog_archive_month', kwargs={
+        return urls.reverse('blog_archive_month', kwargs={
             'year': self.date.year,
             'month': '{0:02}'.format(self.date.month),
         })

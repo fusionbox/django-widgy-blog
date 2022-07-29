@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BlogLayout',
             fields=[
-                ('defaultlayout_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='page_builder.DefaultLayout')),
+                ('defaultlayout_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='page_builder.DefaultLayout', on_delete=models.deletion.CASCADE)),
                 ('title', models.CharField(max_length=1023)),
                 ('date', models.DateField(default=django.utils.timezone.now)),
                 ('summary', models.TextField(null=True, blank=True)),
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(null=True, blank=True)),
                 ('keywords', models.CharField(max_length=255, null=True, blank=True)),
                 ('page_title', models.CharField(help_text=b'Will default to the blog title', max_length=255, null=True, blank=True)),
-                ('author', models.ForeignKey(related_name='blog_bloglayout_set', to=settings.AUTH_USER_MODEL)),
+                ('author', models.ForeignKey(related_name='blog_bloglayout_set', to=settings.AUTH_USER_MODEL, on_delete=models.deletion.CASCADE)),
                 ('image', widgy.contrib.page_builder.db.fields.ImageField(related_name='+', on_delete=django.db.models.deletion.PROTECT, blank=True, to='filer.File', null=True)),
             ],
             options={

@@ -2,9 +2,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 
 from django_extensions.db.fields import AutoSlugField
@@ -18,7 +17,6 @@ from widgy.models import links
 from .site import site
 
 
-@python_2_unicode_compatible
 class AbstractBlog(models.Model):
     detail_url_name = 'blog_detail'
     preview_url_name = 'blog_detail_preview'
@@ -153,12 +151,12 @@ class AbstractBlogLayout(BaseLayout):
 @widgy.register
 class BlogLayout(AbstractBlogLayout):
     author = models.ForeignKey(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'),
-                               related_name='blog_bloglayout_set')
+                               related_name='blog_bloglayout_set',
+                               on_delete=models.CASCADE)
     image = ImageField(blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
 
 
-@python_2_unicode_compatible
 class Tag(models.Model):
     name = models.CharField(unique=True, max_length=100)
     slug = AutoSlugField(populate_from='name', unique=True)
