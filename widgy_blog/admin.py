@@ -146,12 +146,15 @@ class BlogAdmin(WidgyAdmin):
             tags = layout_data.pop('tags', [])
             field = self.model._meta.get_field('content')
             obj.content = field.add_root(obj, layout_data)
-            obj.content.working_copy.content.tags = tags
+            obj.content.working_copy.content.tags.set(tags)
         else:
             # editing
             content = obj.content.working_copy.content
             for field_name, value in layout_data.items():
-                setattr(content, field_name, value)
+                if field_name == 'tags':
+                    content.tags.set(value)
+                else:
+                    setattr(content, field_name, value)
             content.save()
 
         return super(BlogAdmin, self).save_model(request, obj, form, change)
