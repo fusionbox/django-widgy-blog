@@ -151,8 +151,8 @@ class BlogAdmin(WidgyAdmin):
             # editing
             content = obj.content.working_copy.content
             for field_name, value in layout_data.items():
-                if field_name == 'tags':
-                    content.tags.set(value)
+                if getattr(content, field_name).__class__.__name__ == "ManyRelatedManager":
+                    getattr(content, field_name).set(value)
                 else:
                     setattr(content, field_name, value)
             content.save()
