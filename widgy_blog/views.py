@@ -1,7 +1,6 @@
 import datetime
+from urllib import parse
 
-from django.utils import six
-from django.utils.six.moves.urllib import parse
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.syndication.views import Feed
