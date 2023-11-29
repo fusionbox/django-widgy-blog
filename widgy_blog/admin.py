@@ -123,6 +123,7 @@ class BlogAdmin(WidgyAdmin):
     def get_form(self, request, obj=None, **kwargs):
         # We need to get the fields for BlogLayout
         kwargs.pop('change')
+        kwargs.pop('fields')  # django 3.1 started passing this as an optimization
         defaults = {
             'formfield_callback': partial(self.formfield_for_dbfield, request=request),
             'form': self.form,
