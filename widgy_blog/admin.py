@@ -6,6 +6,7 @@ from django.forms.models import modelform_factory
 from django.contrib.admin.views.main import ChangeList
 from django.forms.models import model_to_dict
 from django.contrib.auth import get_user_model
+from django.db.models import Manager
 
 from widgy.admin import WidgyAdmin
 from widgy.forms import WidgyForm
@@ -147,12 +148,15 @@ class BlogAdmin(WidgyAdmin):
             tags = layout_data.pop('tags', [])
             field = self.model._meta.get_field('content')
             obj.content = field.add_root(obj, layout_data)
-            obj.content.working_copy.content.tags.set(tags)
+            content = obj.content.working_copy.content
+            for field_name, value in layout_data.items():
+                if isinstance(getattr(content, field_name), Manager):
+                    getattr(content, field_name).set(value)
         else:
             # editing
             content = obj.content.working_copy.content
             for field_name, value in layout_data.items():
-                if getattr(content, field_name).__class__.__name__ == "ManyRelatedManager":
+                if isinstance(getattr(content, field_name), Manager):
                     getattr(content, field_name).set(value)
                 else:
                     setattr(content, field_name, value)
