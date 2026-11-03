@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 
     'filer',
     'easy_thumbnails',
-    'sorl.thumbnail',
     'treebeard',
     'compressor',
     'django_extensions',
