@@ -126,7 +126,7 @@ class AbstractBlogLayout(BaseLayout):
             self.slug = slugify(self.title)
         return super(AbstractBlogLayout, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
