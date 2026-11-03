@@ -6,3 +6,5 @@ __pycache__/
 dist/
 build/
 .venv/
+
+test_db.sqlite3
