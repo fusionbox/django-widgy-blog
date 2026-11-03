@@ -2,6 +2,7 @@ import datetime
 from urllib import parse
 
 from django.views.generic import ListView, DetailView
+from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.syndication.views import Feed
 from django import urls
