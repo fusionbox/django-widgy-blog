@@ -9,11 +9,11 @@
   {% endif %}
   {% for page in paginator.page_range %}
     {% if page %}
-      {% ifequal page page_obj.number %}
+      {% if page == page_obj.number %}
         <span class="here page">{{ page }}</span>
       {% else %}
         <a href="?page={{ page }}" class="page">{{ page }}</a>
-      {% endifequal %}
+      {% endif %}
     {% endif %}
   {% endfor %}
   {% if page_obj.has_next %}
