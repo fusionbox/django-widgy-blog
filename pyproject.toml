@@ -45,6 +45,7 @@ dev = [
     "django-contrib-comments>=2.2.0",
     "pytest",
     "pytest-django",
+    "python-lsp-server>=1.15.0",
 ]
 
 [tool.pytest]
