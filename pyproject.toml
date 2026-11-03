@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-widgy-blog"
+version = "0.2.4.dev0"
+description = "Reusable blog app for Django-Widgy"
+readme = "README.rst"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Fusionbox, Inc.", email = "programmers@fusionbox.com" },
+]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "django-widgy",
+]
+
+[project.urls]
+Source = "https://github.com/fusionbox/django-widgy-blog/"
+
+[tool.setuptools.packages.find]
+include = ["widgy_blog*"]
+
+[tool.setuptools.package-data]
+widgy_blog = ["templates/**/*.html"]
+
+[tool.uv.sources]
+django-widgy = { path = "../django-widgy", editable = true }
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-django",
+]
