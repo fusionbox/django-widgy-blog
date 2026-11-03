@@ -102,6 +102,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'mezzanine.core.middleware.SitePermissionMiddleware',
 )
 
 TEMPLATES = [
