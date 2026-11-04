@@ -38,7 +38,7 @@ include = ["widgy_blog*"]
 widgy_blog = ["templates/**/*.html"]
 
 [tool.uv.sources]
-django-widgy = { path = "../django-widgy", editable = true }
+django-widgy = { git = "https://github.com/fusionbox/django-widgy.git", branch = "upgrades" }
 
 [dependency-groups]
 dev = [
