@@ -411,7 +411,7 @@ wheels = [
 [[package]]
 name = "django-widgy"
 version = "0.10.0"
-source = { git = "https://github.com/fusionbox/django-widgy.git?branch=upgrades#e419d25571d9ddc24098a11a81a66808bd391e7b" }
+source = { git = "https://github.com/fusionbox/django-widgy.git?branch=upgrades#fba94e42ba5ee908117ac4915cb60fcae66cb63a" }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "bleach" },
