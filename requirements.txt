@@ -57,7 +57,7 @@ django-pyscss==2.0.3
     # via django-widgy
 django-treebeard==4.8.0
     # via django-widgy
-django-widgy @ git+https://github.com/fusionbox/django-widgy.git@fba94e42ba5ee908117ac4915cb60fcae66cb63a
+django-widgy @ git+https://github.com/fusionbox/django-widgy.git@31d2a9116e232e4d1e0c50504bb0255e50e4ed8d
     # via django-widgy-blog
 docstring-to-markdown==0.17
     # via python-lsp-server
