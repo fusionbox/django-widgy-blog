@@ -1,5 +1,4 @@
 from django.conf import settings
+from django.utils.module_loading import import_string
 
-from widgy.utils import fancy_import
-
-site = fancy_import(settings.WIDGY_MEZZANINE_SITE)
+site = import_string(settings.WIDGY_MEZZANINE_SITE)

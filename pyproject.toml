@@ -15,16 +15,24 @@ authors = [
 classifiers = [
     "Environment :: Web Environment",
     "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.9"
 dependencies = [
-    "django-extensions>=4.1",
+    "django>=3.2,<5.0",
+    "django-extensions>=3.2.3",
     "django-widgy",
 ]
 
